@@ -1,0 +1,113 @@
+<div class="table-responsive" dir="rtl">
+<table [class]="themes">
+  <thead [class]="headerColor">
+  <tr>
+    <th id="sort" class="{{headerName.ColumnName}}" (click)="Sort($event , headerName, i , input)"
+        *ngFor="let headerName of KeyUser; let i = index" title="{{headerName.ColumnName}}">
+      {{headerName.name}} <i #input id="Iconsort" [class]="IconSort"></i>
+    </th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td *ngFor="let valueObject of KeyUser; let i = index">
+      <input name="{{valueObject.ColumnName}}" class="form-control" *ngIf="valueObject.type === 'input'" id="input" (keyup)="filter($event)" type="text">
+      <input name="{{valueObject.ColumnName}}" class="form-control" *ngIf="valueObject.type === 'Date'" id="input" (keyup)="filter($event)" type="text">
+      <input name="{{valueObject.ColumnName}}" class="form-control" *ngIf="valueObject.type === 'CustomCode'" id="input" (keyup)="filter($event)" type="text">
+      <select class="custom-select" (click)="Dropdown($event)" id='select' *ngIf="valueObject.type === 'dropdown'"
+              name="{{valueObject.ColumnName}}">
+        <option value="">انتخاب همه</option>
+        <option value="{{namedrop.name}}" *ngFor="let namedrop of KeyUser[i].dropdown">{{namedrop.faName}}</option>
+      </select>
+    </td>
+  </tr>
+  <tr *ngIf="Data.length === 0">هیچ دیتایی وجود ندارد</tr>
+  <tr *ngFor="let row of Data; let i = index">
+    <td *ngFor="let value of KeyUser">
+      <span [class] = 'value.class' *ngIf="value.type !== 'Date' && value.type !== 'CustomCode'">{{row[value.ColumnName]}}</span>
+      <span [class] = 'value.class' *ngIf="value.type !== 'Date' && value.type !== 'CustomCode' && value.typeData === 'object'">
+       {{row[value.ColumnName[0]['name']][value.ColumnName[0]['properties']]}}
+      </span>
+      <span [class] = 'value.class' *ngIf="value.type === 'Date' && value.typeData === 'object'">{{row[value.ColumnName[0]['name']][value.ColumnName[0]['properties']] | shamsiDate}}</span>
+      <span [class] = 'value.class' *ngIf="value.type === 'Date'">{{row[value.ColumnName] | shamsiDate}}</span>
+      <span [class] = 'value.class' *ngIf="value.type === 'CustomCode'" [innerHTML]="value.openTag + row[value.ColumnName] + value.closeTag"></span>
+      <a id="{{value.id}}" [class] = "value.class" target="_blank"><button [class]="btnColor" *ngIf="value.type === 'button' && value.buttonType === 'href' && row.gateway.name === 'شارژ دستی'" (click)="hrefButton(i, row)">{{value.buttonText}}</button></a>
+      <p target="_blank" *ngIf="value.type === 'button' && value.buttonType === 'href' && row.gateway.name === 'درگاه'">بدون رسید</p>
+      <button [class]="btnColor" *ngIf="value.type === 'button' && value.buttonType === 'modal'" data-toggle="modal" data-target="#exampleModal">modal</button>
+      <button [class]="btnColor" *ngIf="value.type === 'button' && value.buttonType === 'information'" (click)="informationButton(i, row, value.href, value.countParam, value.param)">{{ value.buttonText}}</button>
+      <button [class]="btnColor" *ngIf="value.type === 'button' && value.buttonType === 'sweetAlert'" (click)="sweetalertButton(i , row)">sweetalert</button>
+      <button [class]="btnColor" *ngIf="value.type === 'button' && value.buttonType === 'orderOpration'&& row.status === 'سفارش باز'" (click)="cancelOrder(row.id, row.side, row.symbol)">لغو سفارش</button>
+      <button [class]="btnColor" *ngIf="value.type === 'button' && value.buttonType === 'orderOpration' && row.status === 'پر شده'" (click)="orderOpration(i , row)">جزئیات</button>
+      <p [class] = "value.class" *ngIf="value.type === 'button'  && value.buttonType === 'orderOpration' && row.status === 'لغو شد'">سفارش لغو شد</p>
+      <button [class]="btnColor" *ngIf="value.type === 'button'  && value.buttonType === 'financeExchange'" (click)="financeExchange(row)">مشاهده</button>
+      <span *ngIf="value.type === 'CustomCode'" [innerHTML]="value.HtmlCode"></span>
+      <img *ngIf="value.type === 'img'" src="{{row[value.src]}}">
+    </td>
+  </tr>
+  </tbody>
+
+  <tfoot id="tfoot" [class]="headerColor">
+  <tr>
+    <td id="divRow">
+        <input (keyup.enter)="pageSearch($event)" type="number" id="form1" class="form-control searchPage" placeholder="برو به صفحه"
+               aria-label="Search"/>
+        <span class="counterRow">تعداد سطر:</span><select class="perPage searchPage" aria-label="Default select example" (click)="pageDrop($event)">
+        <option value="10">10</option>
+        <option value="20">20</option>
+        <option value="30">30</option>
+        <option value="40">40</option>
+      </select>
+
+        <nav id="nav" class="searchPage">
+
+          <ul class="pagination">
+<!--            <li (click)="pagination(9)"  [ngClass]="{'page-item active': endPage - 1 === activePage[0]}"class="page-item">-->
+<!--              <a class="page-link"  aria-label="Previous">-->
+<!--                <span aria-hidden="true">&laquo;</span>-->
+<!--              </a>-->
+<!--            </li>-->
+            <li (click)="pagination(count)" *ngFor="let count of totals; let i = index" [ngClass]="{'page-item active': count === activePage[0]}"><a *ngIf="Data.length !== 0" class="text-dark page-link page-item">{{count}}</a></li>
+<!--            <li (click)="pagination(endPage - 1)"  [ngClass]="{'page-item active': startPage + 1 === activePage[0]}"class="page-item">-->
+<!--              <a class="page-link" aria-label="Next">-->
+<!--                <span aria-hidden="true">&raquo;</span>-->
+<!--              </a>-->
+<!--            </li>-->
+          </ul>
+
+
+        </nav>
+    </td>
+    <td *ngFor="let x of tfootCounterTd"></td>
+    <td colspan="2">
+      <button id="btn" type="button" [class]="btnColor" (click)="exportExcel()">خروجی اکسل</button>
+    </td>
+  </tr>
+  <div id= "loadIcon" [style.display]="loading">
+    <img src="./assets/svgLoading/loading%20(1).svg">
+  </div>
+  </tfoot>
+</table>
+</div>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!--<ul class="pagination">-->
+<!--  <li (click)="pagination(count , i)" *ngFor="let count of range; let i = index" [ngClass]="{'page-item active': count === activePage[0]}"><a class="text-dark page-link page-item">{{count}}</a></li>-->
+<!--</ul>-->

@@ -1,0 +1,117 @@
+th {
+  white-space: nowrap;
+}
+.trColor {
+  background-color: #22313a;
+}
+.trColorLight {
+  background-color: #e8e8e8;
+}
+.tableDark {
+  background-color: #2b3c46;
+}
+.btnColorLight {
+  background-color: #1fbdd8;
+}
+.table {
+  position: relative;
+  td, th, tfoot {
+    border: 1px solid black;
+  }
+  width: 100%;
+  #sort {
+    cursor: pointer;
+  }
+  #input {
+    border-radius: 5px;
+    text-align: center;
+  }
+  #select {
+    border-radius: 5px;
+    text-align: center;
+    width: 90%;
+  }
+  @media screen and (max-width: 800px){
+  }
+}
+.pointer-event {
+  cursor: pointer;
+}
+#form1 {
+  width: 30%;
+  margin-left: 6%;
+  @media screen and (max-width: 1500px) {
+    width: 200px;
+  }
+}
+.Textarea {
+  resize: none;
+}
+/* Safari */
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+#background {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  top: 0;
+  left: 0;
+  opacity: 0.3;
+  #loader {
+    position: absolute;
+    top: 45%;
+    left: 45%;
+    transform: translate(-50% , -50%);
+  }
+}
+#divRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#tfoot td {
+  border: none;
+}
+#nav {
+  position: relative;
+  background-color: red;
+}
+#nav ul {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50% , -50%);
+  right: 60%;
+}
+.counterRow {
+  margin-left: 5px;
+  @media screen and (max-width: 1500px) {
+    width: 100px;
+  }
+}
+.page-item {
+  cursor: pointer;
+}
+.perPage {
+  width: 80px;
+  border-radius: 10px;
+}
+#loadIcon {
+position: absolute;
+  top: 50%;
+  left: 50%;
+}
+.searchPage {
+  margin-right: 5%;
+}
+.nowrap {
+  white-space: nowrap;
+}
